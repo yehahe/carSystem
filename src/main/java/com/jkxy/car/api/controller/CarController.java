@@ -1,11 +1,15 @@
 package com.jkxy.car.api.controller;
 
+import com.jkxy.car.api.annotation.CacheLock;
+import com.jkxy.car.api.annotation.CacheParam;
 import com.jkxy.car.api.pojo.Car;
+import com.jkxy.car.api.pojo.CarRequestVO;
 import com.jkxy.car.api.service.CarService;
 import com.jkxy.car.api.utils.JSONResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -84,5 +88,34 @@ public class CarController {
     public JSONResult insertCar(Car car) {
         carService.insertCar(car);
         return JSONResult.ok();
+    }
+
+    /**
+     *  通过汽车品牌分页模糊查询
+     * @param carName
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @PostMapping("selectByCarBrand")
+    public JSONResult selectByCarBrand(@RequestParam("carName") String carName,@RequestParam("pageNum") Integer pageNum,
+    @RequestParam("pageSize") Integer pageSize) {
+        List<Car> carList = carService.findByCarNameWithPage(carName, pageNum, pageSize);
+        return JSONResult.ok(carList);
+    }
+
+    @PostMapping("buyCar")
+    @CacheLock(prefix = "buyCar")
+    public JSONResult buyCar(@RequestBody CarRequestVO carRequestVO, HttpServletRequest request) {
+        String userName = request.getHeader("userName");
+        carRequestVO.setUserName(userName);
+        JSONResult jsonResult;
+        try {
+            jsonResult = carService.buyCar(carRequestVO);
+        }catch (RuntimeException e){
+            return JSONResult.errorMsg(e.getMessage());
+        }
+
+        return jsonResult;
     }
 }

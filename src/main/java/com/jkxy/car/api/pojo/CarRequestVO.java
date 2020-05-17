@@ -1,28 +1,43 @@
 package com.jkxy.car.api.pojo;
 
 
-public class Car {
-    private int id;
+import java.io.Serializable;
+
+/**
+ * @author skryy9
+ */
+public class CarRequestVO extends PageBean implements Serializable {
+    private Integer id;
     private String carName;
     private String carType;
-    private String price;
     private String carSeries;
-    private Integer stockQuantity;
+    //购买数量
+    private Integer quantity;
+    //操作人
+    private String userName;
 
-    public Integer getStockQuantity() {
-        return stockQuantity;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getCarName() {
@@ -41,13 +56,6 @@ public class Car {
         this.carType = carType;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
 
     public String getCarSeries() {
         return carSeries;
@@ -59,12 +67,13 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" +
+        return "CarRequestVO{" +
                 "id=" + id +
                 ", carName='" + carName + '\'' +
                 ", carType='" + carType + '\'' +
-                ", price='" + price + '\'' +
                 ", carSeries='" + carSeries + '\'' +
+                ", quantity=" + quantity +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }
